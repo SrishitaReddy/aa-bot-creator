@@ -1,174 +1,125 @@
 # AA Bot Creator
 
-AA Bot Creator is an AI-powered tool that automates the process of creating Automation Anywhere A360 bots from Business Requirements Documents (BRDs). It analyzes BRDs, extracts requirements, generates documentation, and creates bot packages that can be deployed to Automation Anywhere Control Room.
+AA Bot Creator is a comprehensive tool for automating the creation of Automation Anywhere bots from Business Requirements Documents (BRDs). It streamlines the process of analyzing requirements, generating documentation, and building bots.
 
 ## Features
 
-- **BRD Analysis**: Extract requirements from Business Requirements Documents using AI
-- **Documentation Generation**: Create Solution Design Documents, User Story Documents, and Flow Diagrams
-- **Bot Generation**: Generate Automation Anywhere A360 bot packages based on requirements
+- **BRD Analysis**: Extract and classify requirements from Business Requirements Documents
+- **Documentation Generation**: Create Solution Design Documents and User Story Documents
+- **Bot Building**: Generate Automation Anywhere bot structures based on requirements
 - **Deployment**: Deploy bots directly to Automation Anywhere Control Room
-- **Dependency Management**: Automatically detect and manage dependencies between bots
-
-## Components
-
-The AA Bot Creator consists of the following main components:
-
-1. **BRD Analyzer**: Extracts requirements from Business Requirements Documents
-2. **Document Generator**: Creates documentation based on the extracted requirements
-3. **Bot Builder**: Generates Automation Anywhere bot packages based on requirements
 
 ## Installation
 
-### Prerequisites
-
-- Python 3.6+
-- Automation Anywhere A360 Control Room (for deployment)
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/SrishitaReddy/aa-bot-creator.git
-   cd aa-bot-creator
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Configure the application:
-   ```bash
-   # Edit the configuration file
-   nano config.json
-   ```
-
-## Usage
-
-### Basic Usage
-
 ```bash
-python main.py --input path/to/brd.pdf --output-dir output
-```
+# Clone the repository
+git clone https://github.com/SrishitaReddy/aa-bot-creator.git
+cd aa-bot-creator
 
-This will:
-1. Analyze the BRD and extract requirements
-2. Generate documentation (SDD, USD, Flow Diagram)
-3. Generate bot packages
-
-### Command-Line Options
-
-```
-usage: main.py [-h] --input INPUT [--output-dir OUTPUT_DIR] [--config CONFIG]
-               [--skip-analysis] [--skip-docs] [--skip-bots] [--deploy]
-               [--control-room CONTROL_ROOM] [--api-key API_KEY]
-
-AA Bot Creator - Generate Automation Anywhere bots from BRDs
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --input INPUT, -i INPUT
-                        Input BRD file or directory
-  --output-dir OUTPUT_DIR, -o OUTPUT_DIR
-                        Output directory for generated files
-  --config CONFIG, -c CONFIG
-                        Configuration file
-  --skip-analysis       Skip BRD analysis (use existing requirements)
-  --skip-docs           Skip document generation
-  --skip-bots           Skip bot generation
-  --deploy, -d          Deploy bots to Control Room
-  --control-room CONTROL_ROOM
-                        Control Room URL
-  --api-key API_KEY     API key for Control Room
-```
-
-### Examples
-
-#### Generate Only Documentation
-
-```bash
-python main.py --input path/to/brd.pdf --output-dir output --skip-bots
-```
-
-#### Use Existing Requirements
-
-```bash
-python main.py --input path/to/brd.pdf --output-dir output --skip-analysis
-```
-
-#### Deploy Bots to Control Room
-
-```bash
-python main.py --input path/to/brd.pdf --output-dir output --deploy --control-room https://your-control-room.com --api-key YOUR_API_KEY
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ## Configuration
 
-The `config.json` file contains configuration options for all components of the AA Bot Creator:
+Edit the `config.json` file to customize the behavior of the tool:
 
 ```json
 {
   "brd_analyzer": {
-    "extraction_method": "ai",
-    "ai_model": "gpt-4",
-    "min_confidence_score": 0.7
+    "extraction_method": "rule_based",
+    "requirement_types": ["data_extraction", "data_processing", "system_integration", "process_automation"]
   },
   "document_generator": {
-    "template_dir": "templates",
-    "company_name": "Your Company"
+    "template_folder": "templates",
+    "company_info": {
+      "name": "Your Company",
+      "logo_path": "path/to/logo.png"
+    }
   },
   "bot_builder": {
-    "default_folder": "My Bots",
-    "include_error_handling": true
+    "default_folder": "bots",
+    "error_handling": true,
+    "logging": true
   },
   "control_room": {
-    "url": "https://your-control-room.example.com",
-    "api_key": ""
+    "url": "https://your-control-room-url.com",
+    "api_key": "your-api-key"
   }
 }
 ```
 
-## Module-Specific Usage
+## Usage
 
-Each module can also be used independently:
+### Command Line Interface
 
-### BRD Analyzer
+```bash
+# Analyze a BRD and extract requirements
+python -m aa_bot_creator analyze --input path/to/brd.pdf --output requirements.json
 
-```python
-from brd_analyzer.brd_analyzer import BRDAnalyzer
+# Generate documentation from requirements
+python -m aa_bot_creator document --input requirements.json --output docs/ --type sdd
 
-analyzer = BRDAnalyzer(input_path="path/to/brd.pdf", output_dir="output/requirements")
-requirements = analyzer.analyze()
+# Build bots from requirements
+python -m aa_bot_creator build --input requirements.json --output bots/
+
+# Full pipeline: analyze, document, and build
+python -m aa_bot_creator run --input path/to/brd.pdf --output project/
 ```
 
-### Document Generator
+### Python API
 
 ```python
-from brd_analyzer.document_generator import DocumentGenerator
+from aa_bot_creator.brd_analyzer import BRDAnalyzer
+from aa_bot_creator.document_generator import DocumentGenerator
+from aa_bot_creator.bot_builder import BotBuilder
 
-doc_generator = DocumentGenerator(requirements=requirements, output_dir="output/docs")
-sdd_path = doc_generator.generate_solution_design_document()
-usd_path = doc_generator.generate_user_story_document()
-flow_diagram_path = doc_generator.generate_flow_diagram()
+# Analyze BRD
+analyzer = BRDAnalyzer("path/to/brd.pdf")
+requirements = analyzer.extract_requirements()
+
+# Generate documentation
+doc_gen = DocumentGenerator(requirements, "docs/")
+doc_gen.generate_solution_design_document()
+doc_gen.generate_user_story_document()
+
+# Build bots
+bot_builder = BotBuilder(requirements, "bots/")
+bot_builder.generate_bots()
+bot_builder.deploy_to_control_room()
 ```
 
-### Bot Builder
+## Module Structure
 
-```python
-from bot_builder.bot_builder import BotBuilder
-from bot_builder.utils import enrich_requirements
+- **brd_analyzer**: Extracts and classifies requirements from BRDs
+- **document_generator**: Creates documentation based on requirements
+- **bot_builder**: Generates Automation Anywhere bot structures
+- **utils**: Common utility functions
+- **cli**: Command-line interface
 
-enriched_requirements = enrich_requirements(requirements)
-bot_builder = BotBuilder(requirements=enriched_requirements, output_dir="output/bots")
-bot_packages = bot_builder.generate_all_bots()
+## Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run tests with coverage
+pytest --cov=aa_bot_creator
 ```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## Acknowledgments
 
 - Automation Anywhere for their RPA platform
-- OpenAI for their language models used in the BRD analysis
+- All contributors who have helped shape this project
