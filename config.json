@@ -1,0 +1,39 @@
+{
+  "brd_analyzer": {
+    "extraction_method": "ai",
+    "ai_model": "gpt-4",
+    "min_confidence_score": 0.7,
+    "max_requirements": 100,
+    "requirement_types": [
+      "functional",
+      "non-functional",
+      "technical",
+      "business"
+    ]
+  },
+  "document_generator": {
+    "template_dir": "templates",
+    "company_name": "Your Company",
+    "company_logo": "assets/logo.png",
+    "document_author": "AA Bot Creator",
+    "include_ai_disclaimer": true
+  },
+  "bot_builder": {
+    "default_folder": "My Bots",
+    "bot_naming_convention": "Bot_{REQ_ID}_{REQ_NAME}",
+    "include_error_handling": true,
+    "include_logging": true,
+    "include_comments": true
+  },
+  "control_room": {
+    "url": "https://your-control-room.example.com",
+    "api_key": "",
+    "default_folder_id": "0"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "aa_bot_creator.log",
+    "max_size": 10485760,
+    "backup_count": 5
+  }
+}
